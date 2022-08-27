@@ -1,0 +1,41 @@
+.timeRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  width: 80px;
+  font-weight: bold;
+}
+
+.professionalRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid;
+  height: 82px;
+}
+
+.professionalRowSelected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid;
+  height: 82px;
+  background-color: aquamarine;
+}
+
+.professionalTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  font-weight: bold;
+}
+
+.professionalTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid;
+  padding: 5px;
+}

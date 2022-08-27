@@ -1,0 +1,16 @@
+.professionalRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid;
+  height: 82px;
+}
+
+.professionalRowSelected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid;
+  height: 82px;
+  background-color: aquamarine;
+}
