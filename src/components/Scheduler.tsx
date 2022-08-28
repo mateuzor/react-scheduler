@@ -166,7 +166,8 @@ function Scheduler() {
               { required: true, message: "Please select start time!" },
               ({ getFieldValue }) => ({
                 validator(rule, value) {
-                  if (value < getFieldValue("endTime")) {
+                  console.log(value, getFieldValue("endTime"));
+                  if (value > getFieldValue("endTime")) {
                     return Promise.reject(
                       "end time must be smaller than end time"
                     );
@@ -185,7 +186,8 @@ function Scheduler() {
               { required: true, message: "Please select an end time!" },
               ({ getFieldValue }) => ({
                 validator(rule, value) {
-                  if (value > getFieldValue("startTime")) {
+                  console.log(value, getFieldValue("startTime"));
+                  if (value < getFieldValue("startTime")) {
                     return Promise.reject(
                       "end time must be greater than start time"
                     );
