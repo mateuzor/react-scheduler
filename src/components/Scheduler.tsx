@@ -50,6 +50,7 @@ function Scheduler() {
   }, []);
 
   const handleCancel = () => {
+    form.resetFields();
     setIsModalVisible(false);
   };
 
@@ -58,6 +59,7 @@ function Scheduler() {
       startTime: startTime,
       endTime: endTime,
     };
+
     const availabilitiesCopy = availabilities;
 
     availabilitiesCopy[professional] = timeInterval;
@@ -166,8 +168,7 @@ function Scheduler() {
               { required: true, message: "Please select start time!" },
               ({ getFieldValue }) => ({
                 validator(rule, value) {
-                  console.log(value, getFieldValue("endTime"));
-                  if (value > getFieldValue("endTime")) {
+                  if (Number(value) > Number(getFieldValue("endTime"))) {
                     return Promise.reject(
                       "end time must be smaller than end time"
                     );
@@ -186,8 +187,13 @@ function Scheduler() {
               { required: true, message: "Please select an end time!" },
               ({ getFieldValue }) => ({
                 validator(rule, value) {
-                  console.log(value, getFieldValue("startTime"));
-                  if (value < getFieldValue("startTime")) {
+                  console.log(
+                    "end time:",
+                    value,
+                    "start time:",
+                    getFieldValue("startTime")
+                  );
+                  if (Number(value) < Number(getFieldValue("startTime"))) {
                     return Promise.reject(
                       "end time must be greater than start time"
                     );
