@@ -1,3 +1,21 @@
+.schedulerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 1280px;
+}
+
+.buttonRow {
+  width: 560px;
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+.button {
+  background: #055f5b;
+  border-color: white;
+}
+
 .timeRow {
   display: flex;
   justify-content: center;
@@ -11,7 +29,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid;
+  border: 0.5px solid;
   height: 82px;
 }
 
@@ -19,7 +37,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid;
+  border: 0.5px solid;
   height: 82px;
   background-color: aquamarine;
 }
@@ -36,6 +54,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid;
+  border: 0.5px solid;
   padding: 5px;
+  background-color: #f5e0b7;
+}
+
+.timeColumns {
+  display: flex;
+  justify-content: center;
 }

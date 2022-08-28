@@ -1,14 +1,21 @@
 import { Select } from "antd";
 
-function ProfessionalSelect({ label, handleChange }: any) {
+interface SelectProps {
+  value?: string;
+  label: string;
+  onChange?: () => void;
+}
+
+function ProfessionalSelect({ value, label, onChange }: SelectProps) {
   const { Option } = Select;
   return (
     <>
       <strong>{label}</strong>
       <Select
+        value={value}
         defaultValue=""
         style={{ width: "100% " }}
-        onChange={(professional) => handleChange(professional)}
+        onChange={onChange}
       >
         <Option value="doctor">Doctor</Option>
         <Option value="assistant">Assistant</Option>

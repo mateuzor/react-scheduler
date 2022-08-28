@@ -1,41 +1,46 @@
 import { Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import styles from "./AvailabilityColumn.module.css";
+import { availabilityTimeType } from "./@types/availabilitiesType";
 
-function AvailabilityColumn({ data }: any) {
-  const [teste, setTeste] = useState<any>({});
+interface AvailabilityColumnProps {
+  timeInterval: { startTime: string; endTime: string };
+  workingHours: string[];
+}
 
-  function isEmpty(obj: any) {
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) return false;
-    }
-    return true;
-  }
+function AvailabilityColumn({
+  timeInterval: { startTime, endTime },
+  workingHours,
+}: any) {
+  const [availability, setAvailability] = useState<
+    availabilityTimeType | undefined
+  >();
 
   useEffect(() => {
-    console.log("teste", data);
-    if (!isEmpty(data)) {
-      console.log(data);
-      setTeste(data);
+    if (startTime && endTime) {
+      setAvailability({ startTime, endTime });
     }
-  }, [data]);
+  }, [startTime, endTime]);
 
   return (
     <Col span={3}>
-      {Array.from(Array(7)).map((row, index) => {
+      {workingHours.map((_, index: number) => {
         return (
           <Row
+            key={index}
             className={
-              index + 9 >= Number(teste.startTime) &&
-              index + 9 <= Number(teste.endTime)
+              Number(index + workingHours[0]) >=
+                Number(availability?.startTime) &&
+              Number(index + workingHours[0]) <= Number(availability?.endTime)
                 ? styles.professionalRowSelected
                 : styles.professionalRow
             }
           >
-            {index + 9 >= Number(teste.startTime) &&
-            index + 9 <= Number(teste.endTime)
+            {Number(index + workingHours[0]) >=
+              Number(availability?.startTime) &&
+            Number(index + workingHours[0]) <= Number(availability?.endTime)
               ? "Available"
-              : index + 9}
+              : ""}
           </Row>
         );
       })}

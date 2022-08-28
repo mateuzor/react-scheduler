@@ -1,14 +1,21 @@
 import { Select } from "antd";
+interface SelectProps {
+  value?: string;
+  label: string;
+  onChange?: () => void;
+}
 
-function TimeSelect({ label, handleChange }: any) {
+function TimeSelect({ value, label, onChange }: SelectProps) {
   const { Option } = Select;
+
   return (
     <>
       <strong>{label}</strong>
       <Select
+        value={value}
         defaultValue=""
         style={{ width: "100% " }}
-        onChange={(time) => handleChange(time)}
+        onChange={onChange}
       >
         <Option value="9">9:00 am</Option>
         <Option value="10">10:00 am</Option>

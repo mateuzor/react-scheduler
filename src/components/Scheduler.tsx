@@ -1,51 +1,59 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Modal, Row, Select } from "antd";
+import { Button, Col, Form, Input, Modal, Row } from "antd";
 import styles from "./Scheduler.module.css";
 import AvailabilityColumn from "./AvailabilityColumn";
 import TimeSelect from "./TimeSelect";
 import ProfessionalSelect from "./ProfessionalSelect";
+import { availabilitiesType } from "./@types/availabilitiesType";
+
+interface OnfinishDatatype {
+  professional: string;
+  startTime: string;
+  endTime: string;
+}
 
 function Scheduler() {
   const professionals = ["Doctor", "Assistant", "Hygenist"];
+  const workingHours = [9, 10, 11, 12, 13, 14, 15];
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [professional, setProfessional] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
 
-  const [availabilities, setAvailabilities] = useState<any>({
+  const [form] = Form.useForm();
+
+  const [availabilities, setAvailabilities] = useState<availabilitiesType>({
     doctor: {},
     assistant: {},
     hygenist: {},
   });
 
-  const handleProfessionalChange = (professional: any) => {
-    setProfessional(professional);
-  };
-
-  const handleStartTimeChange = (time: any) => {
-    setStartTime(time);
-  };
-
-  const handleEndTimeChange = (time: any) => {
-    setEndTime(time);
-  };
+  function converTimeToTwelveHours(timeValue: string) {
+    let time = timeValue.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)?$/) || [
+      timeValue,
+    ];
+    if (time.length > 1) {
+      time = time.slice(1);
+      time[0] = String(+time[0] % 12 || 12);
+    }
+    return time.join("");
+  }
 
   const showModal = () => {
-    setProfessional("");
-    setStartTime("");
-    setEndTime("");
     setIsModalVisible(true);
   };
 
-  // useEffect(() => {
-  //   console.log(availabilities);
-  //   const professionalsAvailabilities = JSON.parse(
-  //     localStorage.getItem("professionalAvailabilities")
-  //   );
-  //   setAvailabilities(professionalsAvailabilities);
-  // }, []);
+  useEffect(() => {
+    console.log(availabilities);
+    const professionalsAvailabilities = JSON.parse(
+      localStorage.getItem("professionalAvailabilities")
+    );
+    console.log(professionalsAvailabilities);
+    setAvailabilities(professionalsAvailabilities);
+  }, []);
 
-  const handleOk = () => {
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const onFinish = ({ professional, startTime, endTime }: OnfinishDatatype) => {
     const timeInterval = {
       startTime: startTime,
       endTime: endTime,
@@ -59,89 +67,143 @@ function Scheduler() {
       "professionalAvailabilities",
       JSON.stringify(availabilitiesCopy)
     );
-
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setProfessional("");
-    setStartTime("");
-    setEndTime("");
+    form.resetFields();
     setIsModalVisible(false);
   };
 
   return (
-    <Col>
-      <Row justify="end">
-        <Button onClick={showModal}>ADD AVAILABILITY</Button>
+    <Col className={styles.schedulerContainer}>
+      <Row className={styles.buttonRow} justify="end">
+        <Button
+          onClick={showModal}
+          type="primary"
+          style={{ background: "#055F5B", borderColor: "white" }}
+        >
+          ADD AVAILABILITY
+        </Button>
       </Row>
       <Row className={styles.professionalTitleRow} gutter={[2, 2]}>
         <>
           <Col
             style={{
               width: "83.5px",
-              border: "1px solid",
+              border: "0.5px solid",
             }}
           >
             <Row
               style={{
                 padding: "5px",
                 height: "32px",
+                backgroundColor: "#F5E0B7",
               }}
             ></Row>
           </Col>
-          {professionals.map((professional) => {
+          {professionals.map((professional, index) => {
             return (
-              <Col span={3}>
+              <Col key={index} span={3}>
                 <Row className={styles.professionalTitle}>{professional}</Row>
               </Col>
             );
           })}
         </>
       </Row>
-      <Row
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-        gutter={[2, 2]}
-      >
-        <Col style={{ border: "1px solid" }}>
-          {Array.from(Array(7)).map((row, index) => {
-            return <Row className={styles.timeRow}>{`${index + 9}:00`}</Row>;
+      <Row className={styles.timeColumns} gutter={[2, 2]}>
+        <Col
+          className={styles.ti}
+          style={{ border: "0.5px solid", backgroundColor: "#F5E0B7" }}
+        >
+          {workingHours.map((row, index) => {
+            return (
+              <Row key={index} className={styles.timeRow}>
+                {converTimeToTwelveHours(`${index + workingHours[0]}:00`)}
+              </Row>
+            );
           })}
         </Col>
-        <AvailabilityColumn data={availabilities["doctor"]} />
-        <AvailabilityColumn data={availabilities["assistant"]} />
-        <AvailabilityColumn data={availabilities["hygenist"]} />
+        <AvailabilityColumn
+          timeInterval={availabilities["doctor"]}
+          workingHours={workingHours}
+        />
+        <AvailabilityColumn
+          timeInterval={availabilities["assistant"]}
+          workingHours={workingHours}
+        />
+        <AvailabilityColumn
+          timeInterval={availabilities["hygenist"]}
+          workingHours={workingHours}
+        />
       </Row>
+
       <Modal
         visible={isModalVisible}
-        onOk={handleOk}
         okText="Save"
         cancelButtonProps={{
           style: { display: "none" },
         }}
-        // okButtonProps={{
-        //   disabled:
-        //     professional !== "" && startTime !== "" && endTime !== ""
-        //       ? false
-        //       : true,
-        // }}
+        okButtonProps={{
+          style: { display: "none" },
+        }}
         onCancel={handleCancel}
       >
-        <ProfessionalSelect
-          label="Select a column"
-          handleChange={handleProfessionalChange}
-        />
-        <TimeSelect
-          label="Select a start time"
-          handleChange={handleStartTimeChange}
-        />
-        <TimeSelect
-          label="Select an end time"
-          handleChange={handleEndTimeChange}
-        />
+        <Form
+          form={form}
+          name="basic"
+          wrapperCol={{ span: 24 }}
+          onFinish={onFinish}
+          autoComplete="off"
+        >
+          <Form.Item
+            name="professional"
+            rules={[
+              { required: true, message: "Please select a professional!" },
+            ]}
+          >
+            <ProfessionalSelect label="Select a column" />
+          </Form.Item>
+          <Form.Item
+            name="startTime"
+            rules={[
+              { required: true, message: "Please select start time!" },
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (value < getFieldValue("endTime")) {
+                    return Promise.reject(
+                      "end time must be smaller than end time"
+                    );
+                  } else {
+                    return Promise.resolve();
+                  }
+                },
+              }),
+            ]}
+          >
+            <TimeSelect label="Select a start time" />
+          </Form.Item>
+          <Form.Item
+            name="endTime"
+            rules={[
+              { required: true, message: "Please select an end time!" },
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (value > getFieldValue("startTime")) {
+                    return Promise.reject(
+                      "end time must be greater than start time"
+                    );
+                  } else {
+                    return Promise.resolve();
+                  }
+                },
+              }),
+            ]}
+          >
+            <TimeSelect label="Select an end time" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Save
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </Col>
   );

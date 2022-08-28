@@ -2,15 +2,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid;
+  border: 0.5px solid;
   height: 82px;
+  background-color: white;
 }
 
 .professionalRowSelected {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid;
+  border: 0.5px solid;
   height: 82px;
-  background-color: aquamarine;
+  background-color: #4b9c99;
+  font-weight: 500;
+  color: white;
 }
