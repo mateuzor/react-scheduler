@@ -41,12 +41,14 @@ function Scheduler() {
   };
 
   useEffect(() => {
-    console.log(availabilities);
-    const professionalsAvailabilities = JSON.parse(
-      localStorage.getItem("professionalAvailabilities")
+    const professionalsAvailabilities = localStorage.getItem(
+      "professionalAvailabilities"
     );
-    console.log(professionalsAvailabilities);
-    setAvailabilities(professionalsAvailabilities);
+
+    if (professionalsAvailabilities) {
+      const parsedValue = JSON.parse(professionalsAvailabilities);
+      setAvailabilities(parsedValue);
+    }
   }, []);
 
   const handleCancel = () => {
@@ -60,7 +62,7 @@ function Scheduler() {
       endTime: endTime,
     };
 
-    const availabilitiesCopy = availabilities;
+    const availabilitiesCopy: any = availabilities;
 
     availabilitiesCopy[professional] = timeInterval;
 

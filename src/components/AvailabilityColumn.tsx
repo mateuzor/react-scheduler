@@ -24,7 +24,7 @@ function AvailabilityColumn({
 
   return (
     <Col span={3}>
-      {workingHours.map((_, index: number) => {
+      {workingHours.map((workingHour: string[], index: number) => {
         return (
           <Row
             key={index}
